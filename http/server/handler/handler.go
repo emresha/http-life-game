@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"game/internal/service"
+	"game/pkg/life"
 	"net/http"
 	"os"
 )
@@ -17,7 +18,7 @@ type LifeStates struct {
 	service.LifeService
 }
 
-func sendFile(w http.ResponseWriter, r *http.Request) {
+func newGame(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	f, err := os.ReadFile("static/index.html")
 	if err != nil {
@@ -44,7 +45,12 @@ func New(ctx context.Context,
 		LifeService: lifeService,
 	}
 
-	serveMux.HandleFunc("/", sendFile)
+	serveMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		newWorldGenerate, _ := life.NewWorld(100, 100)
+		newWorldGenerate.RandInit(5)
+		lifeState.LifeService.CurrentWorld = newWorldGenerate
+		newGame(w, r)
+	})
 	serveMux.HandleFunc("/nextstate", lifeState.nextState)
 
 	return serveMux, nil

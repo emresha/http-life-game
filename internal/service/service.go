@@ -8,8 +8,8 @@ import (
 
 // для хранения состояния
 type LifeService struct {
-	currentWorld *life.World
-	nextWorld    *life.World
+	CurrentWorld *life.World
+	NextWorld    *life.World
 }
 
 func New(height, width int) (*LifeService, error) {
@@ -28,8 +28,8 @@ func New(height, width int) (*LifeService, error) {
 	}
 
 	ls := LifeService{
-		currentWorld: currentWorld,
-		nextWorld:    newWorld,
+		CurrentWorld: currentWorld,
+		NextWorld:    newWorld,
 	}
 
 	return &ls, nil
@@ -37,9 +37,9 @@ func New(height, width int) (*LifeService, error) {
 
 // получение очередного состояния игры
 func (ls *LifeService) NewState() *life.World {
-	life.NextState(ls.currentWorld, ls.nextWorld)
+	life.NextState(ls.CurrentWorld, ls.NextWorld)
 
-	ls.currentWorld = ls.nextWorld
+	ls.CurrentWorld = ls.NextWorld
 
-	return ls.currentWorld
+	return ls.CurrentWorld
 }

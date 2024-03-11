@@ -11,9 +11,8 @@ type World struct {
 	Cells  [][]bool
 }
 
-// Используйте код из предыдущего урока по игре «Жизнь»
 func NewWorld(height, width int) (*World, error) {
-	// создаём тип World с количеством слайсов hight (количество строк)
+	// создаём тип World с количеством слайсов height (количество строк)
 	cells := make([][]bool, height)
 	for i := range cells {
 		cells[i] = make([]bool, width) // создаём новый слайс в каждой строке
