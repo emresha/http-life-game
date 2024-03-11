@@ -20,7 +20,7 @@ func New(height, width int) (*LifeService, error) {
 		return nil, err
 	}
 	// для упрощения примера хаотично заполним
-	currentWorld.RandInit(5)
+	currentWorld.RandInit(7)
 
 	newWorld, err := life.NewWorld(height, width)
 	if err != nil {

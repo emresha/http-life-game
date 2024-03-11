@@ -47,7 +47,7 @@ func New(ctx context.Context,
 
 	serveMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		newWorldGenerate, _ := life.NewWorld(100, 100)
-		newWorldGenerate.RandInit(5)
+		newWorldGenerate.RandInit(7)
 		lifeState.LifeService.CurrentWorld = newWorldGenerate
 		newGame(w, r)
 	})

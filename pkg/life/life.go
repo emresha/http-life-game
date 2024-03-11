@@ -91,10 +91,11 @@ func (w *World) RandInit(percentage int) {
 }
 
 func (w *World) fillAlive(num int) {
+	r := rand.New(rand.NewSource(time.Now().Unix()))
 	aliveCount := 0
-	for j, row := range w.Cells {
+	for _, row := range w.Cells {
 		for k := range row {
-			w.Cells[j][k] = true
+			w.Cells[r.Intn(w.Width)][k] = true
 			aliveCount++
 			if aliveCount == num {
 
