@@ -19,8 +19,8 @@ func New(height, width int) (*LifeService, error) {
 	if err != nil {
 		return nil, err
 	}
-	// для упрощения примера хаотично заполним 
-	currentWorld.RandInit(40)
+	// для упрощения примера хаотично заполним
+	currentWorld.RandInit(5)
 
 	newWorld, err := life.NewWorld(height, width)
 	if err != nil {
@@ -34,6 +34,7 @@ func New(height, width int) (*LifeService, error) {
 
 	return &ls, nil
 }
+
 // получение очередного состояния игры
 func (ls *LifeService) NewState() *life.World {
 	life.NextState(ls.currentWorld, ls.nextWorld)

@@ -38,7 +38,7 @@ func (w *World) Next(x, y int) bool {
 	return false // в любых других случаях — клетка мертва
 }
 
-func (w *World) Neighbors(x, y int) int {
+func (w World) Neighbors(x, y int) int {
 	deltas := [][]int{
 		{-1, -1}, {-1, 0}, {-1, 1},
 		{0, -1}, {0, 1},
@@ -50,20 +50,11 @@ func (w *World) Neighbors(x, y int) int {
 	for _, delta := range deltas {
 		neighborX := x + delta[0]
 		neighborY := y + delta[1]
-		if neighborX < 0 {
-			neighborX += w.Width
-		}
-		if neighborX >= w.Width {
-			neighborX %= w.Width
-		}
-		if neighborY >= w.Height {
-			neighborY %= w.Height
-		}
-		if neighborY < 0 {
-			neighborY += w.Height
-		}
-		if w.Cells[neighborY][neighborX] {
-			count++
+
+		if neighborX >= 0 && neighborX < w.Width && neighborY >= 0 && neighborY < w.Height {
+			if w.Cells[neighborY][neighborX] {
+				count++
+			}
 		}
 	}
 

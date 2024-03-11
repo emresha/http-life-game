@@ -7,6 +7,7 @@ import (
 	"game/internal/service"
 	"net/http"
 	"time"
+
 	"go.uber.org/zap"
 )
 
@@ -35,7 +36,7 @@ func Run(
 	if err != nil {
 		return nil, err
 	}
-	
+
 	muxHandler, err := new(ctx, logger, *lifeService)
 	if err != nil {
 		return nil, err

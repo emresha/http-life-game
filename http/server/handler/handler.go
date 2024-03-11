@@ -3,15 +3,36 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"game/internal/service"
 	"net/http"
+	"os"
 )
 
 // создадим новый тип для добавления middleware к обработчикам
 type Decorator func(http.Handler) http.Handler
+
 // объект для хранения состояния игры
 type LifeStates struct {
 	service.LifeService
+}
+
+func sendFile(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	f, err := os.ReadFile("static/index.html")
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	_, err = w.Write(f)
+
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 }
 
 func New(ctx context.Context,
@@ -23,10 +44,12 @@ func New(ctx context.Context,
 		LifeService: lifeService,
 	}
 
+	serveMux.HandleFunc("/", sendFile)
 	serveMux.HandleFunc("/nextstate", lifeState.nextState)
 
 	return serveMux, nil
 }
+
 // функция добавления middleware
 func Decorate(next http.Handler, ds ...Decorator) http.Handler {
 	decorated := next

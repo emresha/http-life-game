@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Display JSON Data</title>
+<style>
+    body {
+        margin: 0px;
+        padding: 5px;
+        background-color: rgb(32, 32, 32);
+    }
+
+    div {
+        margin: 0px;
+    }
+
+    #grid {
+        position: fixed;
+        inset: 0px;
+        max-width: fit-content;
+        max-height: fit-content;
+        margin: auto;
+        border: 3px solid #161616;
+        background-color: rgb(32, 32, 32);
+    }
+
+    .cell {
+        width: 7px;
+        height: 7px;
+        border: 1px solid  rgb(24, 24, 24);
+        display:flex;
+        flex:auto;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .row {
+        display: flex;
+    }
+    .green {
+        background-color: rgb(86, 204, 86);
+    }
+    .black {
+        background-color: rgb(32, 32, 32);
+    }
+</style>
+</head>
+<body>
+<div id="grid"></div>
+</body>
+<script>
+function getNextState() {
+    fetch('http://localhost:8081/nextstate')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayGrid(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+function displayGrid(data) {
+    const gridContainer = document.getElementById('grid');
+    gridContainer.innerHTML = ''; // Clear previous content
+
+    data.forEach(row => {
+        const r = document.createElement('div')
+        r.classList.add('row')
+        row.forEach(value => {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            if (value === true) {
+                cell.classList.add('green');
+            } else {
+                cell.classList.add('black');
+            }
+            r.appendChild(cell);
+        });
+    gridContainer.appendChild(r)
+    });
+}
+
+// Call getNextState every 0.5 seconds
+setInterval(getNextState, 100);
+</script>
+</html>
